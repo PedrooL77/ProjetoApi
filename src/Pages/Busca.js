@@ -2,30 +2,30 @@ import { View, Text, TextInput, StyleSheet, FlatList, ActivityIndicator } from '
 import React, { useEffect, useState } from 'react';
 
 export default function Busca() {
-    const [usuarios, setUsuarios ] = useState( [] );
+    const [objetos, setObjetos ] = useState( [] );
     const [error, setError ] = useState(false);
     const [busca, setBusca] = useState(false);
     const [filtro, setFiltro ] = useState(false);
 
-    async function getUsuarios()
+    async function getObjetos()
     {
-        await fetch('https://fakestoreapi.com/users', {
+        await fetch('http://10.139.75.99:5251/api/Objetos/GetAllObjetos', {
             method: 'GET',
             headers: {
               'content-type': 'application/json'
             }
           })
             .then( res => ( res.ok == true ) ? res.json() : false )
-            .then( json => setUsuarios( json ) )
+            .then( json => setObjetos( json ) )
             .catch( err => setError( true ) )
     }
 
     useEffect( () => {
-        getUsuarios();
+        getObjetos();
     }, [] );
 
     useEffect( () => {
-        setFiltro( usuarios.filter( (item) => item.name.firstname == busca )[0] );
+        setFiltro( objetos.filter( (item) => item.objetoNome == busca )[0] );
     }, [busca] );
 
     return (
@@ -33,14 +33,14 @@ export default function Busca() {
             <View style={css.searchBox}>
                 <TextInput
                     style={css.search}
-                    placeholder="Buscar usuarios"
-                    placeholderTextColor="white"
+                    placeholder="Buscar objetos"
+                    placeholderTextColor="#717165"
                     TextInput={busca}
                     onChangeText={(digitado) => setBusca( digitado ) }
                 />
             </View>
-            { filtro && <Text style={css.text}>{filtro.name.firstname} {filtro.name.lastname}</Text> }
-            { ( !filtro && busca ) && <ActivityIndicator size="large" color="white" /> }
+            { filtro && <Text style={css.text}>{filtro.objetoNome} {filtro.objetoNome}</Text> }
+            { ( !filtro && busca ) && <ActivityIndicator size="large" color="black" /> }
         </View>
     )
 }
@@ -49,10 +49,10 @@ const css = StyleSheet.create({
         flexGrow: 1,
         width: "100%",
         alignItems: "center",
-        backgroundColor: "#191919",
+        backgroundColor: "white",
     },
     text: {
-        color: "white"
+        color: "black"
     },
     searchBox: {
         width: "100%",
@@ -64,9 +64,10 @@ const css = StyleSheet.create({
         width: "96%",
         height: 60,
         borderWidth: 1,
-        borderColor: "white",
+        borderColor: "#717165",
         borderRadius: 8,
         padding: 10,
-        color: "white"
+        backgroundColor: "lightgray",
+        color: "black"
     }
 })

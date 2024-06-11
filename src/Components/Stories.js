@@ -1,18 +1,18 @@
 import { View, Text, StyleSheet, FlatList, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
 
-export default function Stories({produtos}) {
+export default function Stories({objetos}) {
 
   return (
     <FlatList
-      data={produtos}
+      data={objetos}
       renderItem={ ({item}) => 
         <View style={css.story}>
-          <Image source={{ uri: item.image}} style={css.image}/>
+          <Image source={{ uri: item.objetoFoto}} style={css.image}/>
         </View>
       }
       keyExtractor={ (item) => item.id }
-      contentContainerStyle={[css.container, { width: produtos.length * 70 }]}
+      contentContainerStyle={[css.container, { width: objetos.length * 70 }]}
       horizontal={true}
     />
   )
@@ -27,13 +27,6 @@ const css = StyleSheet.create({
         alignItems: "flex-end",
         gap: 10,
         marginBottom: 20
-    },
-    story: {
-        width: 60,
-        height: 60,
-        backgroundColor: "white",
-        borderRadius: 30,
-        overflow: "hidden"
     },
     image: {
       width: "100%",
