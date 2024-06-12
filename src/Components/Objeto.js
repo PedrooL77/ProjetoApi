@@ -1,9 +1,14 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react';
 
 export default function Objeto({ objetoId, objetoNome, objetoFoto, objetoCor, objetoObservacao, objetoLocalDesaparecimento, objetoDtDesaparecimento, objetoDtEncontro }) {
     
     const [detalhes, setDetalhes] = useState(null);
+    const [observacao, setObservacao] = useState(null);
+    const [descricao, setObservacaoDescricao] = useState();
+    const [local, setObservacaoLocal] = useState();
+    const [data, setObservacaoData] = useState();
+    const [fecha, setFechar] = useState();
 
     return (
         <View style={css.container}>
@@ -13,10 +18,15 @@ export default function Objeto({ objetoId, objetoNome, objetoFoto, objetoCor, ob
             </View>
             <View style={css.boxImage}>
                 <Image source={{ uri: objetoFoto }} style={css.imagem} />
-                <TouchableOpacity style={css.btnLogin} title="Detalhes" onPress={setDetalhes}>
-                    <Text style={css.btnLoginText}>DETALHES</Text>
-                </TouchableOpacity>
-                {detalhes && (
+                <View style={css.btns}>
+                    <TouchableOpacity style={css.btnLogin} title="Detalhes" onPress={setDetalhes}>
+                        <Text style={css.btnLoginText}>DETALHES</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={css.btnLogin} title="Observação" onPress={setObservacao}>
+                        <Text style={css.btnLoginText}>OBSERVACÃO</Text>
+                    </TouchableOpacity>
+                </View>
+               
                 <View style={css.detailsBox}>
                     <Text style={css.detailsText}>Cor: {objetoCor}</Text>
                     <Text style={css.detailsText}>Observação: {objetoObservacao}</Text>
@@ -24,7 +34,30 @@ export default function Objeto({ objetoId, objetoNome, objetoFoto, objetoCor, ob
                     <Text style={css.detailsText}>Data de Desaparecimento: {objetoDtDesaparecimento}</Text>
                     <Text style={css.detailsText}>Data de Encontro: {objetoDtEncontro}</Text>
                 </View>
-                )}
+                
+                <View style={css.observacao}>
+                    <TextInput
+                        style={css.search}
+                        placeholder="Descrição"
+                        placeholderTextColor="lightgray"
+                        TextInput={descricao}
+                        onChangeText={(digitado) => setObservacaoDescricao(digitado)} />
+
+                    <TextInput
+                        style={css.search}
+                        placeholder="Local"
+                        placeholderTextColor="lightgray"
+                        TextInput={local}
+                        onChangeText={(digitado) => setObservacaoLocal(digitado)} />
+
+                    <TextInput
+                        style={css.search}
+                        placeholder="Data"
+                        placeholderTextColor="lightgray"
+                        TextInput={data}
+                        onChangeText={(digitado) => setObservacaoData(digitado)} />
+                </View>
+                
             </View>
             
         </View>
@@ -34,6 +67,15 @@ const css = StyleSheet.create({
     container: {
         width: "100%",
         height: 600
+    },
+    btns:{
+        flexDirection: "row"
+    },
+    observacao:{
+        width: "100%",
+        padding: 10,
+        marginTop: 10,
+        backgroundColor: "#717165"
     },
     boxTitle: {
         width: "100%",
@@ -66,26 +108,6 @@ const css = StyleSheet.create({
         height: "70%",
         resizeMode: "cover"
     },
-    categoryBox: {
-        width: "100%",
-        marginTop: 15
-    },
-    descriptionBox: {
-        width: "100%",
-        marginTop: 15,
-        padding: 10
-    },
-    descriptionText: {
-        color: "white",
-        textAlign: "justify"
-    },
-    categoryBox: {
-        width: "100%",
-        padding: 10
-    },
-    categoryText: {
-        color: "white"
-    },
     detailsBox: {
         width: "100%",
         padding: 10,
@@ -98,7 +120,7 @@ const css = StyleSheet.create({
         marginBottom: 5
     },
     btnLogin: {
-        width: "100%",
+        width: "50%",
         height: 50,
         borderWidth: 1,
         borderRadius: 10,

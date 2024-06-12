@@ -1,18 +1,18 @@
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Image, Button } from 'react-native'
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../Context/AuthContext';
 
-export default function Login() {
 
-    const [usuarioEmail, setUsuarioEmail] = useState("");
-    const [usuarioSenha, setUsuarioSenha] = useState("");
+export default function Login({ }) {
 
-    const { Login, error } = useContext(AuthContext);
+    const [email, setEmail] = useState("");
+    const [senha, setSenha] = useState("");
+
+    const { Login, error, setCadastro } = useContext(AuthContext);
 
     function RealizaLogin() {
-       Login( usuarioEmail, usuarioSenha );
+       Login(email, senha);
     }
-   
 
     return (
         <ScrollView contentContainerStyle={css.container}>
@@ -21,24 +21,27 @@ export default function Login() {
                 inputMode="email"
                 placeholder="Email"
                 style={css.input}
-                value={usuarioEmail}
-                onChangeText={(digitado) => setUsuarioEmail(digitado)}
-                placeholderTextColor="white"
+                value={email}
+                onChangeText={(digitado) => setEmail(digitado)}
+                placeholderTextColor="lightgray"
             />
             <TextInput
                 inputMode="text"
                 placeholder="Password"
                 secureTextEntry={true}
                 style={css.input}
-                value={usuarioSenha}
-                onChangeText={(digitado) => setUsuarioSenha(digitado)}
-                placeholderTextColor="white"
+                value={senha}
+                onChangeText={(digitado) => setSenha(digitado)}
+                placeholderTextColor="lightgray"
             />
             <View style={css.forgot}>
                 <Text style={css.forgotText}>Esqueceu a senha?</Text>
             </View>
             <TouchableOpacity style={css.btnLogin} onPress={RealizaLogin}>
-                <Text style={css.btnLoginText}>Log In</Text>
+                <Text style={css.btnLoginText}>Login</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={css.btnCadastro} onPress={ () => setCadastro( true ) }>
+                <Text style={css.btnCadastroText}>Cadastre-se</Text>
             </TouchableOpacity>
             {error &&
                 <View style={css.error}>
@@ -46,9 +49,9 @@ export default function Login() {
                 </View>
             }
         </ScrollView>
-        
     )
 }
+
 const css = StyleSheet.create({
     container: {
         flexGrow: 1,
@@ -60,6 +63,7 @@ const css = StyleSheet.create({
     },
     logo: {
         width: "100%",
+        height: "40%",
         resizeMode: "contain"
     },
     input: {
@@ -69,7 +73,7 @@ const css = StyleSheet.create({
         marginBottom: 15,
         padding: 15,
         backgroundColor: "#262626",
-        color: "#717165"
+        color: "white"
     },
     forgot: {
         width: "90%",
@@ -102,7 +106,17 @@ const css = StyleSheet.create({
         marginTop: 30
     },
     errorText: {
-        color: "white",
+        color: "black",
         textAlign: "center"
+    },
+    btnCadastro: {
+        width: "90%",
+        marginTop: 10,
+        justifyContent: "flex-end",
+        alignItems: "flex-end",
+    },
+    btnCadastroText: {
+        color: "#717165",
+        fontWeight: "bold"
     }
 });

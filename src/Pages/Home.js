@@ -4,8 +4,6 @@ import React, { useEffect, useState } from 'react'
 import Objeto from '../Components/Objeto';
 import { useFocusEffect } from '@react-navigation/native';
 
-
-
 export default function Home() {
 
   const [objetos, setObjetos] = useState([]);
@@ -36,8 +34,8 @@ export default function Home() {
     <View style={css.container}>
       {objetos ?
         <>
-          
           <Image source={require("../../assets/InApplogopng.png")} style={css.logo} />
+          
           <FlatList
             style={css.lista}
             data={objetos}

@@ -8,7 +8,7 @@ import { AuthContext } from '../Context/AuthContext';
 import Home from '../Pages/Home';
 import Busca from '../Pages/Busca';
 import Login from '../Pages/Login';
-import Videos from '../Pages/Videos';
+import Cadastro from '../Pages/Cadastro';
 import Perfil from '../Pages/Perfil';
 import Inserir from '../Pages/Inserir';
 
@@ -17,10 +17,14 @@ const Tab = createBottomTabNavigator();
 
 export default function Rotas() {
 
-    const { logado } = useContext(AuthContext);
+    const { logado, cadastro, setCadastro} = useContext(AuthContext);
 
-    if (!logado) {
+    if (!logado && !cadastro ) {
         return (<Login />)
+    }
+
+    if( !logado && cadastro ) {
+        return ( <Cadastro />)
     }
 
     return (
@@ -60,15 +64,6 @@ export default function Rotas() {
                     options={{
                         tabBarIcon: ({ color, size }) => (
                             <MaterialCommunityIcons name="plus-box" color={color} size={size} />
-                        ),
-                    }}
-                />
-                <Tab.Screen
-                    name="Videos"
-                    component={Videos}
-                    options={{
-                        tabBarIcon: ({ color, size }) => (
-                            <MaterialCommunityIcons name="youtube-tv" color={color} size={size} />
                         ),
                     }}
                 />

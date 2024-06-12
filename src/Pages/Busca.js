@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Image, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
 export default function Busca() {
@@ -31,6 +31,7 @@ export default function Busca() {
     return (
         <View style={css.container}>
             <View style={css.searchBox}>
+            <Image source={require("../../assets/logoAPI.png")} style={css.logo} />
                 <TextInput
                     style={css.search}
                     placeholder="Buscar objetos"
@@ -55,13 +56,15 @@ const css = StyleSheet.create({
         color: "black"
     },
     searchBox: {
-        width: "100%",
+        width: "90%",
+        marginTop: 30,
         height: 100,
+        flexDirection: "row",
         justifyContent: "flex-end",
         alignItems: "center",
     },
     search: {
-        width: "96%",
+        width: "80%",
         height: 60,
         borderWidth: 1,
         borderColor: "#717165",
@@ -69,5 +72,9 @@ const css = StyleSheet.create({
         padding: 10,
         backgroundColor: "lightgray",
         color: "black"
+    },
+    logo:{
+        width: "30%",
+        height: "80%",
     }
 })
