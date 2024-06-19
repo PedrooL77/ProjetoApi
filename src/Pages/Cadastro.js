@@ -41,7 +41,7 @@ export default function Insirir() {
         <View style={css.caixatexto}>
           <Text style={css.textcadastro}>Cadastre-Se</Text>
         </View> 
-        { sucesso ? <Text>Cadastro Realizado!</Text> :
+       
         <> 
         <TextInput style={css.input}
             placeholder=" Nome" placeholderTextColor={'lightgray'} onChangeText={(digitado) => setNome(digitado)} TextInput={usuarioNome}
@@ -56,7 +56,11 @@ export default function Insirir() {
             placeholder=" Senha" placeholderTextColor={'lightgray'} onChangeText={(digitado) => setSenha(digitado)} TextInput={usuarioSenha}
         />
         </> 
-        }
+        {sucesso && (
+                <View>
+                    <Text style={css.sucessoTxt}>Observação salva com sucesso!</Text>
+                </View>
+            )}
         { erro && <Text>ERRADO</Text>}
 
       <TouchableOpacity style={css.btnLogin} onPress={Cadastro}><Text style={css.btnLoginText}>INSERIR</Text></TouchableOpacity>

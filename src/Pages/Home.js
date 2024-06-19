@@ -1,73 +1,88 @@
-import { View, Text, StyleSheet, FlatList, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
 
-import Objeto from '../Components/Objeto';
-import { useFocusEffect } from '@react-navigation/native';
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import Objeto from '../Components/Objeto'
 
 export default function Home() {
+  const [objeto, setObjeto] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const [objetos, setObjetos] = useState([]);
 
-  async function getObjetos() {
+  async function getObjeto() {
     await fetch('http://10.139.75.99:5251/api/Objetos/GetAllObjetos', {
       method: 'GET',
       headers: {
-        'content-type': 'application/json'
+        'Content-Type': 'application/json'
       }
     })
       .then(res => res.json())
-      .then(json => setObjetos(json))
-      .catch(err => console.log(err))
+      .then(json => setObjeto(json))
+      .catch(err => console.log(err));
+    setLoading(false);
   }
 
-  useEffect(() => {
-    getObjetos();
-  }, [])
 
-  useFocusEffect(
-    React.useCallback(() => {
-      getObjetos();
-    }, [])
-  );
+  useEffect(() => {
+    getObjeto();
+  }, []);
 
   return (
     <View style={css.container}>
-      {objetos ?
-        <>
-          <Image source={require("../../assets/InApplogopng.png")} style={css.logo} />
-          
-          <FlatList
-            style={css.lista}
-            data={objetos}
-            renderItem={({ item }) => <Objeto objetoNome={item.objetoNome} objetoCor={item.objetoCor} objetoObservacao={item.objetoObservacao} objetoLocalDesaparecimento={item.objetoLocalDesaparecimento} objetoFoto={item.objetoFoto} objetoDtDesaparecimento={item.objetoDtDesaparecimento} objetoDtEncontro={item.objetoDtEncontro} objetoStatus={item.objetoStatus} />}
-            keyExtractor={(item) => item.objetoId }
-            contentContainerStyle={{ height: (objetos.length * 1000) + 110 }}
-          />
-        </>
-        :
-        <Text style={css.text}>Carregando objetos...</Text>
-      }
+      
+      {loading ? (
+        <ActivityIndicator size="large" color="#fff" />
+      ) : (
+        objeto.length > 0 ? (
+          <>
+            
+            <FlatList
+              data={objeto}
+              renderItem={({ item }) => (
+                <Objeto
+                  nome={item.objetoNome}
+                  cor={item.objetoCor}
+                  objetoId={item.objetoId}
+                  objetoLocalDesaparecimeto={item.objetoLocalDesaparecimeto}
+                  observacao={item.objetoObservacao}
+                  foto={item.objetoFoto}
+                  dtdesaparecimento={item.objetoDtDesaparecimeto}
+                  dtencontro={item.objetoDtEncontro}
+                />
+              )}
+              keyExtractor={(item) => item.objetoId}
+              contentContainerStyle={css.listContainer}
+            />
+          </>
+        ) : (
+          <Text style={css.text}>Nenhum objeto encontrado.</Text>
+        )
+      )}
     </View>
   )
 }
+
 const css = StyleSheet.create({
   container: {
-    backgroundColor: "white",
-    flexGrow: 1,
-    color: "white",
-    justifyContent: "center",
-    alignItems: "center"
+    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
   },
   text: {
-    color: "black"
+    fontSize: 18,
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  stories: {
+    width: "100%",
+    height: 100,
+  },
+  boximage:{
+    height: "20%"
   },
   logo:{
-    width: "90%",
-    height: "10%",
-    marginTop: 50
-  },
-  lista:{
-    backgroundColor: "lightgray",
-    width: "100%",
+    marginTop: 30,
+    height: "100%"
   }
 })

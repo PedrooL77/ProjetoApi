@@ -1,138 +1,152 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity, TextInput } from 'react-native'
 import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import Observacao from './Observacao';
 
-export default function Objeto({ objetoId, objetoNome, objetoFoto, objetoCor, objetoObservacao, objetoLocalDesaparecimento, objetoDtDesaparecimento, objetoDtEncontro }) {
-    
-    const [detalhes, setDetalhes] = useState(null);
-    const [observacao, setObservacao] = useState(null);
-    const [descricao, setObservacaoDescricao] = useState();
-    const [local, setObservacaoLocal] = useState();
-    const [data, setObservacaoData] = useState();
-    const [fecha, setFechar] = useState();
+export default function Objeto({ nome, cor, foto, observacao, objetoId }) {
+
+    const [detalhes, setDetalhes] = useState(false);
+    const [observacoes, setObservacoes] = useState(false);
+
+    const altura = () => {
+        if (observacoes) return 780;
+        if (detalhes) return 580;
+        return 460;
+    };
+
+    const mostrarDetalhes = () => {
+        setDetalhes(!detalhes);
+        if (observacoes) setObservacoes(false);
+    };
+
+    const mostrarObservacao = () => {
+        setObservacoes(!observacoes);
+        if (detalhes) setDetalhes(false);
+    };
 
     return (
-        <View style={css.container}>
-            <View style={css.boxTitle}>
-                <View style={css.circleAvatar}></View>
-                <Text style={css.title}>{objetoNome}</Text>
+        <ScrollView contentContainerStyle={[css.box, { height: altura() }]}>
+            <View style={css.header}>
+                <Text style={css.title}>{nome} </Text>
             </View>
             <View style={css.boxImage}>
-                <Image source={{ uri: objetoFoto }} style={css.imagem} />
-                <View style={css.btns}>
-                    <TouchableOpacity style={css.btnLogin} title="Detalhes" onPress={setDetalhes}>
-                        <Text style={css.btnLoginText}>DETALHES</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={css.btnLogin} title="Observação" onPress={setObservacao}>
-                        <Text style={css.btnLoginText}>OBSERVACÃO</Text>
-                    </TouchableOpacity>
-                </View>
-               
-                <View style={css.detailsBox}>
-                    <Text style={css.detailsText}>Cor: {objetoCor}</Text>
-                    <Text style={css.detailsText}>Observação: {objetoObservacao}</Text>
-                    <Text style={css.detailsText}>Local de Desaparecimento: {objetoLocalDesaparecimento}</Text>
-                    <Text style={css.detailsText}>Data de Desaparecimento: {objetoDtDesaparecimento}</Text>
-                    <Text style={css.detailsText}>Data de Encontro: {objetoDtEncontro}</Text>
-                </View>
-                
-                <View style={css.observacao}>
-                    <TextInput
-                        style={css.search}
-                        placeholder="Descrição"
-                        placeholderTextColor="lightgray"
-                        TextInput={descricao}
-                        onChangeText={(digitado) => setObservacaoDescricao(digitado)} />
-
-                    <TextInput
-                        style={css.search}
-                        placeholder="Local"
-                        placeholderTextColor="lightgray"
-                        TextInput={local}
-                        onChangeText={(digitado) => setObservacaoLocal(digitado)} />
-
-                    <TextInput
-                        style={css.search}
-                        placeholder="Data"
-                        placeholderTextColor="lightgray"
-                        TextInput={data}
-                        onChangeText={(digitado) => setObservacaoData(digitado)} />
-                </View>
-                
+                <Image style={css.image} source={{ uri: foto }}></Image>
             </View>
+            <View style={css.buttonsContainer}>
+                <TouchableOpacity style={[css.infos, detalhes && css.infoAparecendo]} onPress={mostrarDetalhes}>
+                    <Text style={css.infosTxt}>Detalhes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[css.infosum, observacoes && css.infoAparecendo]} onPress={mostrarObservacao}>
+                    <Text style={css.infosTxt}>Observação</Text>
+                </TouchableOpacity>
+            </View>
+            {detalhes && (
+                <View style={css.categoryBox}>
+
+                    <Text style={css.categoryText}>Cor: {cor}</Text>
+
+                    <Text style={css.categoryText}>Detalhe: {observacao}</Text>
+                </View>
+            )}
+
+            {observacoes && (
+                <Observacao id={objetoId}/>
+            )}
             
-        </View>
-    );
+        </ScrollView>
+    )
 }
+
 const css = StyleSheet.create({
-    container: {
-        width: "100%",
-        height: 600
+    box: {
+        borderColor: '#4E5C4F',
+        backgroundColor: "lightgray",
+        borderRadius: 10,
+        borderWidth: 3,
+        marginTop: 30,
+        width: 370,
+        margin: '0 auto',
     },
-    btns:{
-        flexDirection: "row"
-    },
-    observacao:{
-        width: "100%",
-        padding: 10,
-        marginTop: 10,
-        backgroundColor: "#717165"
-    },
-    boxTitle: {
-        width: "100%",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        alignItems: "center",
-        marginBottom: 15,
-        marginTop: 15,
-        paddingLeft: 5
-    },
-    circleAvatar: {
-        width: 35,
-        height: 35,
-        borderRadius: 50,
-        backgroundColor: "black",
-        marginRight: 10,
+    header: {
+        padding: 13,
+        borderTopLeftRadius: 7,
+        borderTopRightRadius: 7,
+        backgroundColor: "#717165",
+        alignItems: 'center',
     },
     title: {
-        color: "black",
-        textAlign: "center"
+        fontWeight: 'bold',
+        fontSize: 20,
+        color: 'white'
     },
     boxImage: {
         width: "80%",
-        height: "80%",
-        marginLeft: "10%"
+        marginLeft: "10%",
+        height: 300,
+        marginBottom: 5,
     },
-    imagem: {
+    image: {
         width: "100%",
-        height: "70%",
-        resizeMode: "cover"
+        height: "100%",
+        resizeMode: "cover",
+        borderBottomRightRadius: 7,
+        borderBottomLeftRadius: 7,
+        marginTop: 10
     },
-    detailsBox: {
-        width: "100%",
-        padding: 10,
-        marginTop: 10,
-        backgroundColor: "#717165"
+    descriptionBox: {
+        marginBottom: 10,
     },
-    detailsText: {
-        color: "white",
-        textAlign: "justify",
-        marginBottom: 5
+    descriptionText: {
+        fontWeight: '500',
+        marginLeft: 20,
+        fontSize: 19,
     },
-    btnLogin: {
-        width: "50%",
-        height: 50,
-        borderWidth: 1,
-        borderRadius: 10,
-        marginTop: 10,
-        backgroundColor: "#717165"
-    },
-    btnLoginText: {
-        color: "white",
-        lineHeight: 45,
-        textAlign: "center",
-        fontSize: 15,
-        fontWeight: "bold"
-    }
-})
 
+    buttonsContainer: {
+        flexDirection: 'row',
+        marginLeft: "10%",
+        marginBottom: 10,
+    },
+    infos: {
+        width: '40%',
+        height: 50,
+        marginTop: 20,
+        backgroundColor: "#717165",
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+    },
+    infosum: {
+        width: '40%',
+        height: 50,
+        marginTop: 20,
+        backgroundColor: "#717165",
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 10,
+        marginLeft: 30
+    },
+    infosTxt: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
+    infoAparecendo: {
+        backgroundColor: "#4E5C4F",
+    },
+
+    categoryBox: {
+        alignItems: 'center',
+        marginLeft: "25%",
+        borderColor: "#4E5C4F",
+        textAlign: 'center',
+        width: "50%",
+        backgroundColor: "#717165",
+        paddingVertical: 20,
+        marginTop: 15
+    },
+    categoryText: {
+        fontSize: 16,
+        color: "white",
+        borderRadius: 10,
+    },
+});
